@@ -1,12 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { HelmetProvider, Helmet } from "react-helmet-async";
+import { Provider } from "react-redux";
+
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+import { store } from "./redux/store";
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <HelmetProvider>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Would You Rather app</title>
+        <link rel="canonical" href="https://wouldyourather2022.com/" />
+      </Helmet>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

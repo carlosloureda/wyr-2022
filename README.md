@@ -50,3 +50,7 @@
 ====
 
 - react-router-dom
+
+# Redux
+
+- Create Store
