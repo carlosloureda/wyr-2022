@@ -1,0 +1,35 @@
+{
+  "alicethomas": {
+    "id": "alicethomas",
+    "name": "Alice Thomas",
+    "avatarURL": "https://cdn.pixabay.com/photo/2013/07/13/10/24/beauty-157149_960_720.png",
+    "answers": {
+      "8xf0y6ziyjabvozdd253nd": "optionOne",
+      "6ni6ok3ym7mf1p33lnez": "optionTwo",
+      "am8ehyc8byjqgar0jgpub9": "optionTwo",
+      "loxhs1bqm25b708cmbf3g": "optionTwo"
+    },
+    "questions": ["8xf0y6ziyjabvozdd253nd", "am8ehyc8byjqgar0jgpub9"]
+  },
+  "racheladams": {
+    "id": "racheladams",
+    "name": "Rachel Adams",
+    "avatarURL": "https://cdn.pixabay.com/photo/2016/12/08/19/03/vector-art-1892879_960_720.png",
+    "answers": {
+      "vthrdm985a262al8qx3do": "optionOne",
+      "xj352vofupe1dqz9emx13r": "optionTwo"
+    },
+    "questions": ["loxhs1bqm25b708cmbf3g", "vthrdm985a262al8qx3do"]
+  },
+  "johndoe": {
+    "id": "johndoe",
+    "name": "John Doe",
+    "avatarURL": "https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916_960_720.png",
+    "answers": {
+      "xj352vofupe1dqz9emx13r": "optionOne",
+      "vthrdm985a262al8qx3do": "optionTwo",
+      "6ni6ok3ym7mf1p33lnez": "optionTwo"
+    },
+    "questions": ["6ni6ok3ym7mf1p33lnez", "xj352vofupe1dqz9emx13r"]
+  }
+}
