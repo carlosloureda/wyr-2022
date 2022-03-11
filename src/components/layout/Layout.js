@@ -6,7 +6,6 @@ import { Helmet } from "react-helmet-async";
 import MainErrorBoundary from "../MainErrorBoundary";
 
 const Layout = ({ seo, children, ...props }) => {
-  console.log("props", props);
   const SEO = useCallback(
     () =>
       seo?.title ? (

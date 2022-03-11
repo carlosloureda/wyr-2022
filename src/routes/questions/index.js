@@ -6,13 +6,14 @@ import { useEffect } from "react";
 const QuestionsRoute = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { questions, loading, error } = useSelector(questionsSelector);
+  const { questions, loading, error, allFetched } =
+    useSelector(questionsSelector);
 
   useEffect(() => {
-    if (!questions) {
+    if (!allFetched) {
       dispatch(fetchQuestions());
     }
-  }, [dispatch, questions]);
+  }, [dispatch, allFetched]);
 
   if (loading) {
     return <div>Loading...</div>;
