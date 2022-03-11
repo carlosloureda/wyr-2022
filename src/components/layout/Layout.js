@@ -3,6 +3,8 @@ import { useCallback } from "react";
 import { Outlet, NavLink, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
+import MainErrorBoundary from "../MainErrorBoundary";
+
 const Layout = ({ seo, children, ...props }) => {
   console.log("props", props);
   const SEO = useCallback(
@@ -24,7 +26,9 @@ const Layout = ({ seo, children, ...props }) => {
         <Link to="/leaderboard">Leaderboard</Link>
       </nav>
       {/* {children} */}
-      <Outlet />
+      <MainErrorBoundary>
+        <Outlet />
+      </MainErrorBoundary>
     </div>
   );
 };
