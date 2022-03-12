@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../redux/usersSlice";
+import { useMemo } from "react";
+import useFetchUsers from "../hooks/useFetchUsers";
 
 // TODO: move to component
 
@@ -25,14 +24,7 @@ const Leaderboard = () => {
     - Users: score: answered + created questions adds their score ...
     - 
   */
-  const { users, loading, error } = useSelector((state) => state.users);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!users) {
-      dispatch(fetchUsers());
-    }
-  }, [users, dispatch]);
+  const { users, loading, error } = useFetchUsers();
 
   const sortedUsers = useMemo(() => {
     if (!users) return [];
@@ -61,7 +53,6 @@ const Leaderboard = () => {
     <>
       <h1>Leaderboard</h1>
       <ul>
-        {/* <pre>{JSON.stringify(sortedUsers, null, 2)}</pre> */}
         {sortedUsers.map((user) => (
           <LeaderboardCard key={user.id} user={user} />
         ))}

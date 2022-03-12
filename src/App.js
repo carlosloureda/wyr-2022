@@ -24,9 +24,9 @@ function App() {
           </Route>
           <Route path="leaderboard" element={<Leaderboard />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="login" element={<Login />} />
+          <Route path="logout" element={<div>Logout</div>} />
         </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="logout" element={<div>Logout</div>} />
       </Routes>
     </BrowserRouter>
   );
