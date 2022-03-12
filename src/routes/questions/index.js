@@ -5,6 +5,7 @@ import { useEffect, useMemo } from "react";
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
+import useAuth from "../../context/AuthContext";
 
 // TODO: move to component
 
@@ -42,27 +43,29 @@ const QuestionItem = ({ question }) => {
   );
 };
 
-// TODO: use Registered User for filtered questions
 const useSplittedQuestions = (questions) => {
+  const { currentUser } = useAuth();
   const unansweredQuestions = useMemo(() => {
     return (
       questions &&
       Object.values(questions).filter(
-        // (q) => !q.optionOne.votes.length && !q.optionTwo.votes.length
-        (q) => q
+        (q) =>
+          !q.optionOne.votes.includes(currentUser.id) &&
+          !q.optionTwo.votes.includes(currentUser.id)
       )
     );
-  }, [questions]);
+  }, [questions, currentUser.id]);
 
   const answeredQuestions = useMemo(() => {
     return (
       questions &&
       Object.values(questions).filter(
-        // (q) => q.optionOne.votes.length || q.optionTwo.votes.length
-        (q) => q
+        (q) =>
+          q.optionOne.votes.includes(currentUser.id) ||
+          q.optionTwo.votes.includes(currentUser.id)
       )
     );
-  }, [questions]);
+  }, [questions, currentUser.id]);
 
   return { unansweredQuestions, answeredQuestions };
 };
