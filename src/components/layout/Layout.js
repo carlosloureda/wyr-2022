@@ -1,10 +1,9 @@
 import { useCallback } from "react";
-
 import { Outlet, NavLink, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
-import MainErrorBoundary from "../MainErrorBoundary";
-import useAuth from "../../context/AuthContext";
+import MainErrorBoundary from "@/components/MainErrorBoundary";
+import useAuth from "@/context/AuthContext";
 
 const Layout = ({ seo, children, ...props }) => {
   const SEO = useCallback(

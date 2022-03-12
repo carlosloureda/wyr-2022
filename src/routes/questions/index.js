@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchQuestions, questionsSelector } from "../../redux/questionsSlice";
 import { useEffect, useMemo } from "react";
-
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+
+import { fetchQuestions, questionsSelector } from "@/redux/questionsSlice";
+import useAuth from "@/context/AuthContext";
+
 import "@reach/tabs/styles.css";
-import useAuth from "../../context/AuthContext";
 
 // TODO: move to component
 

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import useFetchUsers from "../hooks/useFetchUsers";
+
+import useFetchUsers from "@/hooks/useFetchUsers";
 
 // TODO: move to component
 

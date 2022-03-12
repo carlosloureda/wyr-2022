@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../context/AuthContext";
-import useFetchUsers from "../hooks/useFetchUsers";
+
+import useAuth from "@/context/AuthContext";
+import useFetchUsers from "@/hooks/useFetchUsers";
 
 const Login = () => {
   const navigate = useNavigate();

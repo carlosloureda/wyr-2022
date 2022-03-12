@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
-import { fetchQuestionById } from "../../redux/questionsSlice";
-import AnsweredQuestionDetail from "../../components/Questions/AnsweredQuestionDetail/AnsweredQuestionDetail";
-import UnansweredQuestionDetail from "../../components/Questions/UnansweredQuestionDetail";
-import useAuth from "../../context/AuthContext";
+import { fetchQuestionById } from "@/redux/questionsSlice";
+import AnsweredQuestionDetail from "@/components/Questions/AnsweredQuestionDetail/AnsweredQuestionDetail";
+import UnansweredQuestionDetail from "@/components/Questions/UnansweredQuestionDetail";
+import useAuth from "@/context/AuthContext";
 
 const useDidCurrentUserAnswer = (question) => {
   const { currentUser } = useAuth();

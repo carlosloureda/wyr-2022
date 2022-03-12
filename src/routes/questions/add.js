@@ -1,21 +1,7 @@
-import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addQuestion } from "../../redux/questionsSlice";
 
-// "loxhs1bqm25b708cmbf3g": {
-//   "id": "loxhs1bqm25b708cmbf3g",
-//   "author": "racheladams",
-//   "timestamp": 1482579767190,
-//   "optionOne": {
-//     "votes": [],
-//     "text": "have all traffic lights you approach be green"
-//   },
-//   "optionTwo": {
-//     "votes": ["alicethomas"],
-//     "text": "never have to stand in line again"
-//   }
-// },
+import { addQuestion } from "@/redux/questionsSlice";
 
 const AddQuestion = () => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import useAuth from "../../../context/AuthContext";
+import useAuth from "@/context/AuthContext";
 
 const AnsweredQuestionDetail = ({ question }) => {
   const optionOneVotes = question.optionOne.votes.length;

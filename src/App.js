@@ -12,7 +12,7 @@ import Question from "./routes/questions/$questionId";
 import AddQuestion from "./routes/questions/add";
 import Leaderboard from "./routes/leaderboard";
 
-import Layout from "./components/layout";
+import Layout from "./components/Layout";
 import NotFoundPage from "./components/NotFoundPage";
 import useAuth from "./context/AuthContext";
 

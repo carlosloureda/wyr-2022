@@ -1,6 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
-import useAuth from "../../../context/AuthContext";
-import { answerQuestion } from "../../../redux/questionsSlice";
+import { useDispatch } from "react-redux";
+
+import useAuth from "@/context/AuthContext";
+import { answerQuestion } from "@/redux/questionsSlice";
 
 const UnansweredQuestionDetail = ({ question, loading }) => {
   const { currentUser } = useAuth();

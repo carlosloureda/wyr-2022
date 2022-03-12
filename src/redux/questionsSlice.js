@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import questions from "../data/questions.json";
-
-import users from "../data/users.json";
-import Api from "../api";
+import Api from "@/api";
 
 const initialState = {
   questions: null,
@@ -138,15 +135,7 @@ export const fetchQuestionById = createAsyncThunk(
   async (questionId, thunkAPI) => {
     const state = thunkAPI.getState();
     if (!state.questions.questions || !state.questions?.questions[questionId]) {
-      return await new Promise((res, rej) =>
-        setTimeout(() => {
-          if (questions[questionId]) {
-            res(questions[questionId]);
-          } else {
-            rej(`Question ${questionId} not found`);
-          }
-        }, 2000)
-      );
+      return Api.get(`/questions/:questionId`, { questionId });
     } else {
       return state.questions.questions[questionId];
     }
