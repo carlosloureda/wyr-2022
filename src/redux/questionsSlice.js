@@ -97,12 +97,16 @@ export function fetchQuestions() {
       const data = await new Promise(
         (res, rej) =>
           setTimeout(() => {
-            const parsedQuestions = Object.values(questions).map((question) => {
-              return {
-                ...question,
-                authorAvatarUrl: users[question.author].avatarURL,
-              };
-            });
+            const parsedQuestions = Object.values(questions).reduce(
+              (acc, question) => {
+                acc[question.id] = {
+                  ...question,
+                  authorAvatarUrl: users[question.author].avatarURL,
+                };
+                return acc;
+              },
+              {}
+            );
             res(parsedQuestions);
           }, 2000)
         // setTimeout(() => rej(`Network down`), 2000)
