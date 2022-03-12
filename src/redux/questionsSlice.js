@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import questions from "../data/questions.json";
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   questions: null,
@@ -18,7 +19,10 @@ export const questionsSlice = createSlice({
       state.loading = true;
     },
     getQuestionsSuccess: (state, { payload }) => {
-      state.questions = payload;
+      state.questions = {
+        ...(state.questions || {}),
+        ...payload,
+      };
       state.loading = false;
       state.error = "";
       state.allFetched = true;
@@ -44,6 +48,23 @@ export const questionsSlice = createSlice({
       state.error = "";
     });
     builder.addCase(fetchQuestionById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    // Add Question
+    builder.addCase(addQuestion.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(addQuestion.fulfilled, (state, action) => {
+      state.questions = {
+        ...state.questions,
+        [action.payload.id]: action.payload,
+      };
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(addQuestion.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
@@ -100,5 +121,30 @@ export const fetchQuestionById = createAsyncThunk(
     } else {
       return state.questions.questions[questionId];
     }
+  }
+);
+
+export const addQuestion = createAsyncThunk(
+  "questions/addQuestion",
+  async ({ optionOne, optionTwo, author }, thunkAPI) => {
+    const questionId = await new Promise((res, rej) =>
+      setTimeout(() => {
+        res(uuidv4());
+        // rej("hjasdiads");
+      }, 2000)
+    );
+    return {
+      id: questionId,
+      author: author,
+      timestamp: Date.now(),
+      optionOne: {
+        votes: [],
+        text: optionOne,
+      },
+      optionTwo: {
+        votes: [],
+        text: optionTwo,
+      },
+    };
   }
 );
