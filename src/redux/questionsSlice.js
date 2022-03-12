@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import questions from "../data/questions.json";
 import { v4 as uuidv4 } from "uuid";
+import users from "../data/users.json";
 
 const initialState = {
   questions: null,
@@ -94,7 +95,16 @@ export function fetchQuestions() {
       //   const response = await fetch("/api/questions");
       //   const data = await response.json();
       const data = await new Promise(
-        (res, rej) => setTimeout(() => res(questions), 2000)
+        (res, rej) =>
+          setTimeout(() => {
+            const parsedQuestions = Object.values(questions).map((question) => {
+              return {
+                ...question,
+                authorAvatarUrl: users[question.author].avatarURL,
+              };
+            });
+            res(parsedQuestions);
+          }, 2000)
         // setTimeout(() => rej(`Network down`), 2000)
       );
       dispatch(getQuestionsSuccess(data));

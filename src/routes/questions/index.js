@@ -1,10 +1,73 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchQuestions, questionsSelector } from "../../redux/questionsSlice";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import "@reach/tabs/styles.css";
+
+// TODO: move to component
+
+const QuestionItem = ({ question }) => {
+  const navigate = useNavigate();
+
+  // const clickbait2 = useCallback(
+  //   (optionText) => (optionText ? `...${optionText.slice(0, 15)}...` : ""),
+  //   []
+  // );
+
+  const clickbait = useMemo(
+    () => (question ? `...${question.optionOne.text.slice(0, 15)}...` : ""),
+    [question]
+  );
+
+  return (
+    <div>
+      <h3>{question.author} asks</h3>
+      <div>
+        <img
+          src={question.authorAvatarUrl}
+          alt={`Avatar of ${question.author}`}
+        />
+      </div>
+      <div>
+        <p>Would You Rather:</p>
+        {/* <p>{clickbait2(question.optionOne.text)}</p> */}
+        <p>{clickbait}</p>
+        <button onClick={() => navigate(`/questions/${question.id}`)}>
+          View Poll
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// TODO: use Registered User for filtered questions
+const useSplittedQuestions = (questions) => {
+  const unansweredQuestions = useMemo(() => {
+    return (
+      questions &&
+      Object.values(questions).filter(
+        // (q) => !q.optionOne.votes.length && !q.optionTwo.votes.length
+        (q) => q
+      )
+    );
+  }, [questions]);
+
+  const answeredQuestions = useMemo(() => {
+    return (
+      questions &&
+      Object.values(questions).filter(
+        // (q) => q.optionOne.votes.length || q.optionTwo.votes.length
+        (q) => q
+      )
+    );
+  }, [questions]);
+
+  return { unansweredQuestions, answeredQuestions };
+};
 
 const QuestionsRoute = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { questions, loading, error, allFetched } =
     useSelector(questionsSelector);
@@ -15,6 +78,9 @@ const QuestionsRoute = () => {
     }
   }, [dispatch, allFetched]);
 
+  const { unansweredQuestions, answeredQuestions } =
+    useSplittedQuestions(questions);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -23,20 +89,39 @@ const QuestionsRoute = () => {
   }
   return (
     <>
-      <h1>AQuestions</h1>
-      <ul>
-        {questions &&
-          Object.values(questions)?.map((question) => {
-            return (
-              <li key={question.id}>
-                <p>{question.optionOne.text}</p>
-                <button onClick={() => navigate(`/questions/${question.id}`)}>
-                  View Question
-                </button>
-              </li>
-            );
-          })}
-      </ul>
+      <h1>Questions</h1>
+
+      <Tabs>
+        <TabList>
+          <Tab>Unanswered</Tab>
+          <Tab>Answered</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <ul>
+              {unansweredQuestions?.map((question) => {
+                return (
+                  <li key={question.id}>
+                    <QuestionItem question={question} />
+                  </li>
+                );
+              })}
+            </ul>
+            º
+          </TabPanel>
+          <TabPanel>
+            <ul>
+              {answeredQuestions?.map((question) => {
+                return (
+                  <li key={question.id}>
+                    <QuestionItem question={question} />
+                  </li>
+                );
+              })}
+            </ul>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </>
   );
 };
