@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import questions from "../data/questions.json";
-import { v4 as uuidv4 } from "uuid";
+
 import users from "../data/users.json";
+import Api from "../api";
 
 const initialState = {
   questions: null,
@@ -69,6 +70,33 @@ export const questionsSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+
+    // Answer Question
+    builder.addCase(answerQuestion.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(answerQuestion.fulfilled, (state, action) => {
+      state.questions = {
+        ...state.questions,
+        [action.payload.id]: {
+          ...state.questions[action.payload.id],
+          [action.payload.answer]: {
+            ...state.questions[action.payload.id][action.payload.answer],
+            votes: [
+              ...state.questions[action.payload.id][action.payload.answer]
+                .votes,
+              action.payload.userId,
+            ],
+          },
+        },
+      };
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(answerQuestion.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
@@ -92,24 +120,11 @@ export function fetchQuestions() {
     dispatch(getQuestions());
 
     try {
-      //   const response = await fetch("/api/questions");
-      //   const data = await response.json();
-      const data = await new Promise(
-        (res, rej) =>
-          setTimeout(() => {
-            const parsedQuestions = Object.values(questions).reduce(
-              (acc, question) => {
-                acc[question.id] = {
-                  ...question,
-                  authorAvatarUrl: users[question.author].avatarURL,
-                };
-                return acc;
-              },
-              {}
-            );
-            res(parsedQuestions);
-          }, 2000)
-        // setTimeout(() => rej(`Network down`), 2000)
+      const data = await new Promise((res, rej) =>
+        setTimeout(async () => {
+          const parsedQuestions = await Api.get(`/questions`);
+          res(parsedQuestions);
+        }, 2000)
       );
       dispatch(getQuestionsSuccess(data));
     } catch (error) {
@@ -141,12 +156,11 @@ export const fetchQuestionById = createAsyncThunk(
 export const addQuestion = createAsyncThunk(
   "questions/addQuestion",
   async ({ optionOne, optionTwo, author }, thunkAPI) => {
-    const questionId = await new Promise((res, rej) =>
-      setTimeout(() => {
-        res(uuidv4());
-        // rej("hjasdiads");
-      }, 2000)
-    );
+    const questionId = await Api.post(`/questions/add`, {
+      optionOne,
+      optionTwo,
+      author,
+    });
     return {
       id: questionId,
       author: author,
@@ -159,6 +173,18 @@ export const addQuestion = createAsyncThunk(
         votes: [],
         text: optionTwo,
       },
+    };
+  }
+);
+
+export const answerQuestion = createAsyncThunk(
+  "questions/answerQuestion",
+  async ({ id, answer, userId }, thunkAPI) => {
+    await Api.post(`/questions/${id}/answer`, { id, answer, userId });
+    return {
+      id,
+      answer,
+      userId,
     };
   }
 );
