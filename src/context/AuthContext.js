@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }) => {
       const currentUser = window.localStorage.getItem("wyr.currentUser")
         ? JSON.parse(window.localStorage.getItem("wyr.currentUser"))
         : "";
-      console.log("currentUser", currentUser);
       dispatch({ type: "CHECK_CURRENT_USER", currentUser });
     }, 1000);
   }, []);
