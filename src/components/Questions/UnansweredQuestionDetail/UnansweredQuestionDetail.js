@@ -9,8 +9,6 @@ const UnansweredQuestionDetail = ({ question, loading }) => {
 
   const onSubmitAnswer = (e) => {
     e.preventDefault();
-    console.log("eee--: ", e.target.elements.option.value);
-
     dispatch(
       answerQuestion({
         id: question.id,

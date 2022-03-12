@@ -39,7 +39,10 @@ const Api = {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (url === "/login") {
-          resolve({ id: options.author });
+          resolve({
+            id: options.author,
+            ...users[options.author],
+          });
         } else if (url === "/questions/add") {
           resolve(uuidv4());
         } else {

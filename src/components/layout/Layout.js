@@ -1,9 +1,26 @@
 import { useCallback } from "react";
 import { Outlet, NavLink, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import clsx from "clsx";
 
 import MainErrorBoundary from "@/components/MainErrorBoundary";
 import useAuth from "@/context/AuthContext";
+
+const StyledNavLink = (props) => (
+  <NavLink
+    {...props}
+    className={({ isActive }) => {
+      return clsx(
+        `h-full flex items-center px-5 
+      hover:bg-blue-400 hover:text-indigo-900 hover:font-normal hover:italic
+      active:text-indigo-600 active:bg-blue-200`,
+        {
+          "text-indigo-600 bg-blue-200 font-bold": isActive,
+        }
+      );
+    }}
+  />
+);
 
 const Layout = ({ seo, children, ...props }) => {
   const SEO = useCallback(
@@ -22,26 +39,41 @@ const Layout = ({ seo, children, ...props }) => {
   return (
     <div id="layout">
       <SEO />
-      <nav>
-        <NavLink to="/questions">Home</NavLink>
-        <Link to="/questions/add">New Question</Link>
-        <Link to="/leaderboard">Leaderboard</Link>
-        {currentUser ? (
-          <Link
-            to="/logout"
-            onClick={async (e) => {
-              e.preventDefault();
-              await logout();
-              navigate("/login");
-            }}
-          >
-            Logout
-          </Link>
-        ) : (
-          <Link to="/login">Login</Link>
-        )}
-      </nav>
-      {/* {children} */}
+      <div className="bg-indigo-900 text-sky-50 h-16 w-full flex flex-row items-center">
+        <div className="basis-1/6 flex justify-center">
+          <h1 className="uppercase text-xl text-amber-500">Would You Rather</h1>
+        </div>
+        <nav className="flex basis-3/6 justify-around h-full items-center">
+          <StyledNavLink to="/">Home</StyledNavLink>
+          <StyledNavLink to="/questions/add">New Question</StyledNavLink>
+          <StyledNavLink to="/leaderboard">Leader Board</StyledNavLink>
+        </nav>
+        <div className="flex basis-1/6" />
+        <div className="basis-1/6 flex flex-row items-center gap-4 justify-end px-12">
+          {currentUser ? (
+            <>
+              <p>{currentUser.id}</p>
+              <img
+                src={currentUser.avatarURL}
+                alt={`Avatar of ${currentUser.id}`}
+                className="w-10 h-10 rounded-full mr-2"
+              />
+              <Link
+                to="/logout"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  await logout();
+                  navigate("/login");
+                }}
+              >
+                Logout
+              </Link>
+            </>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
+        </div>
+      </div>
       <MainErrorBoundary>
         <Outlet />
       </MainErrorBoundary>
