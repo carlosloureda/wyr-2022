@@ -21,9 +21,13 @@ const Api = {
           resolve(parsedQuestions);
         } else if (url === "/questions/:questionId") {
           if (questions[query.questionId]) {
-            resolve(questions[query.questionId]);
+            resolve({
+              ...questions[query.questionId],
+              authorAvatarUrl:
+                users[questions[query.questionId].author].avatarURL,
+            });
           } else {
-            resolve(`Question ${query.questionId} not found`);
+            reject(`Question ${query.questionId} not found`);
           }
         } else {
           resolve({ ok: true });

@@ -2,10 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { addQuestion } from "@/redux/questionsSlice";
+import useAuth from "@/context/AuthContext";
 
 const AddQuestion = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { currentUser } = useAuth();
 
   const { loading } = useSelector((state) => state.questions);
 
@@ -13,13 +15,11 @@ const AddQuestion = () => {
     e.preventDefault();
     const optionOne = e.target.elements.optionOne.value;
     const optionTwo = e.target.elements.optionTwo.value;
-
     const result = await dispatch(
       addQuestion({
         optionOne,
         optionTwo,
-        // TODO: retrieve ID of user from localstorage/context
-        author: "carlosloureda",
+        author: currentUser.id,
       })
     );
     if (!result.error) {
@@ -28,33 +28,6 @@ const AddQuestion = () => {
       // TODO: add some alerts?
       alert("error happened: ", result.error);
     }
-
-    // error.message
-    // {
-    //   "type": "questions/addQuestion/fulfilled",
-    //   "payload": {
-    //       "id": "e0059924-547b-4e88-92f1-f9ece776a111",
-    //       "author": "carlosloureda",
-    //       "timestamp": 1647044175835,
-    //       "optionOne": {
-    //           "votes": [],
-    //           "text": "asd"
-    //       },
-    //       "optionTwo": {
-    //           "votes": [],
-    //           "text": "asd"
-    //       }
-    //   },
-    //   "meta": {
-    //       "arg": {
-    //           "optionOne": "asd",
-    //           "optionTwo": "asd",
-    //           "author": "carlosloureda"
-    //       },
-    //       "requestId": "ucsLC1RZ-5UFgcX0WoJ0J",
-    //       "requestStatus": "fulfilled"
-    //   }
-    // }
   };
 
   return (

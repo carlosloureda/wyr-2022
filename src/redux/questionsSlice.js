@@ -4,7 +4,10 @@ import Api from "@/api";
 const initialState = {
   questions: null,
   loading: false,
-  error: "",
+  error: {
+    message: "",
+    action: "", // 'fetchQuestions', 'fetchQuestionById', 'addQuestion'
+  },
   // To diff when we fetched all the info or not.
   allFetched: false,
 };
@@ -23,12 +26,18 @@ export const questionsSlice = createSlice({
         ...payload,
       };
       state.loading = false;
-      state.error = "";
+      state.error = {
+        message: "",
+        action: "",
+      };
       state.allFetched = true;
     },
     getQuestionsFailure: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.error = {
+        message: payload.error,
+        action: "fetchQuestions",
+      };
       state.allFetched = false;
     },
   },
@@ -44,11 +53,18 @@ export const questionsSlice = createSlice({
         [action.payload.id]: action.payload,
       };
       state.loading = false;
-      state.error = "";
+      state.error = {
+        message: "",
+        action: "",
+      };
     });
     builder.addCase(fetchQuestionById.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      state.error = {
+        message: action.error.message,
+        action: "fetchQuestionById",
+      };
     });
 
     // Add Question
@@ -61,11 +77,18 @@ export const questionsSlice = createSlice({
         [action.payload.id]: action.payload,
       };
       state.loading = false;
-      state.error = "";
+      state.error = {
+        message: "",
+        action: "",
+      };
     });
     builder.addCase(addQuestion.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      state.error = {
+        message: action.error.message,
+        action: "addQuestion",
+      };
     });
 
     // Answer Question
@@ -88,11 +111,18 @@ export const questionsSlice = createSlice({
         },
       };
       state.loading = false;
-      state.error = "";
+      state.error = {
+        message: "",
+        action: "",
+      };
     });
     builder.addCase(answerQuestion.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      state.error = {
+        message: action.error.message,
+        action: "answerQuestions",
+      };
     });
   },
 });

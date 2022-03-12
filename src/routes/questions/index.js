@@ -75,6 +75,7 @@ const QuestionsRoute = () => {
   const dispatch = useDispatch();
   const { questions, loading, error, allFetched } =
     useSelector(questionsSelector);
+  const hasError = error?.action === "fetchQuestions";
 
   useEffect(() => {
     if (!allFetched) {
@@ -88,8 +89,8 @@ const QuestionsRoute = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  if (error) {
-    throw new Error(error);
+  if (hasError) {
+    throw new Error(error.message);
   }
   return (
     <>
@@ -111,7 +112,6 @@ const QuestionsRoute = () => {
                 );
               })}
             </ul>
-            º
           </TabPanel>
           <TabPanel>
             <ul>

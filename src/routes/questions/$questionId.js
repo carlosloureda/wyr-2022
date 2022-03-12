@@ -10,23 +10,23 @@ import useAuth from "@/context/AuthContext";
 const useDidCurrentUserAnswer = (question) => {
   const { currentUser } = useAuth();
   return (
-    question.optionOne.votes.includes(currentUser.id) ||
-    question.optionOne.votes.includes(currentUser.id)
+    (question &&
+      (question.optionOne.votes.includes(currentUser.id) ||
+        question.optionOne.votes.includes(currentUser.id))) ||
+    false
   );
 };
 
 const Question = () => {
   const params = useParams();
   const dispatch = useDispatch();
-
   const { questions, error, loading } = useSelector((state) => state.questions);
-
+  const hasError = error?.action === "fetchQuestionById";
   const question = (questions && questions[params.questionId]) || null;
-
   const currentUserDidAnswer = useDidCurrentUserAnswer(question);
 
   useEffect(() => {
-    if (!question && !error) {
+    if (!question && !error.message) {
       dispatch(fetchQuestionById(params.questionId));
     }
   }, [dispatch, question, error, params.questionId]);
@@ -35,11 +35,11 @@ const Question = () => {
     <>
       <h1>Question Detail {params.questionId}</h1>
       {loading && <div>Loading...</div>}
-      {error && <div>{error}</div>}
-      {currentUserDidAnswer && (
+      {hasError && <div>{error.message}</div>}
+      {question && currentUserDidAnswer && (
         <AnsweredQuestionDetail question={question} loading={loading} />
       )}
-      {!currentUserDidAnswer && (
+      {question && !currentUserDidAnswer && (
         <UnansweredQuestionDetail question={question} loading={loading} />
       )}
 

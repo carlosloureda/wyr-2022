@@ -4,8 +4,14 @@ const AnsweredQuestionDetail = ({ question }) => {
   const optionOneVotes = question.optionOne.votes.length;
   const optionTwoVotes = question.optionTwo.votes.length;
   const totalVotes = optionOneVotes + optionTwoVotes;
-  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
-  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
+  const optionOnePercentage = Math.round(
+    (optionOneVotes / totalVotes) * 100,
+    2
+  );
+  const optionTwoPercentage = Math.round(
+    (optionTwoVotes / totalVotes) * 100,
+    2
+  );
 
   const { currentUser } = useAuth();
   const hasMyVote = (option) => option.votes.includes(currentUser.id);
