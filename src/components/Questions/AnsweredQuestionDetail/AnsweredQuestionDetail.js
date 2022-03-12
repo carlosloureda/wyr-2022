@@ -1,7 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import useAuth from "../../../context/AuthContext";
 
 const AnsweredQuestionDetail = ({ question }) => {
-  const navigate = useNavigate();
+  const optionOneVotes = question.optionOne.votes.length;
+  const optionTwoVotes = question.optionTwo.votes.length;
+  const totalVotes = optionOneVotes + optionTwoVotes;
+  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
+  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
+
+  const { currentUser } = useAuth();
+  const hasMyVote = (option) => option.votes.includes(currentUser.id);
+
   return (
     <div>
       <h3>{question.author} asks</h3>
@@ -11,12 +19,18 @@ const AnsweredQuestionDetail = ({ question }) => {
           alt={`Avatar of ${question.author}`}
         />
       </div>
+      {/* Details */}
       <div>
-        <p>Would You Rather:</p>
         <p>{question.optionOne.text}</p>
-        <button onClick={() => navigate(`/questions/${question.id}`)}>
-          View Poll
-        </button>
+        <p>{`${optionOneVotes} of ${totalVotes}`}</p>
+        <p>{optionOnePercentage}%</p>
+        {hasMyVote(question.optionOne) && <p>My Vote</p>}
+      </div>
+      <div>
+        <p>{question.optionTwo.text}</p>
+        <p>{`${optionTwoVotes} of ${totalVotes}`}</p>
+        <p>{optionTwoPercentage}%</p>
+        {hasMyVote(question.optionTwo) && <p>My Vote</p>}
       </div>
     </div>
   );
