@@ -1,10 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import questions from "../data/questions.json";
+import Api from "@/api";
+import {
+  fetchUsers,
+  updateUser,
+  userAnsweredQuestion,
+  userCreatedQuestion,
+} from "./usersSlice";
 
 const initialState = {
   questions: null,
   loading: false,
-  error: "",
+  action: "", // 'fetchQuestions', 'fetchQuestionById', 'addQuestion'
+  error: {
+    message: "",
+  },
   // To diff when we fetched all the info or not.
   allFetched: false,
 };
@@ -16,16 +25,24 @@ export const questionsSlice = createSlice({
   reducers: {
     getQuestions: (state) => {
       state.loading = true;
+      state.action = "fetchQuestions";
     },
     getQuestionsSuccess: (state, { payload }) => {
-      state.questions = payload;
+      state.questions = {
+        ...(state.questions || {}),
+        ...payload,
+      };
       state.loading = false;
-      state.error = "";
+      state.error = {
+        message: "",
+      };
       state.allFetched = true;
     },
     getQuestionsFailure: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.error = {
+        message: payload.error,
+      };
       state.allFetched = false;
     },
   },
@@ -33,6 +50,7 @@ export const questionsSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchQuestionById.pending, (state, action) => {
       state.loading = true;
+      state.action = "fetchQuestionById";
     });
     builder.addCase(fetchQuestionById.fulfilled, (state, action) => {
       // Add user to the state array
@@ -41,11 +59,62 @@ export const questionsSlice = createSlice({
         [action.payload.id]: action.payload,
       };
       state.loading = false;
-      state.error = "";
+      state.error = {
+        message: "",
+      };
     });
     builder.addCase(fetchQuestionById.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      state.error = {
+        message: action.error.message,
+      };
+    });
+
+    // Add Question
+    builder.addCase(addQuestion.pending, (state, action) => {
+      state.loading = true;
+      state.action = "addQuestion";
+    });
+    builder.addCase(addQuestion.fulfilled, (state, action) => {
+      state.questions = {
+        ...state.questions,
+        [action.payload.id]: action.payload,
+      };
+      state.loading = false;
+      state.error = {
+        message: "",
+      };
+    });
+    builder.addCase(addQuestion.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+      state.error = {
+        message: action.error.message,
+      };
+    });
+
+    // Answer Question
+    builder.addCase(answerQuestion.pending, (state, action) => {
+      state.loading = true;
+      state.action = "answerQuestions";
+    });
+    builder.addCase(answerQuestion.fulfilled, (state, action) => {
+      state.questions = {
+        ...state.questions,
+        [action.payload.id]: action.payload.questionUpdated,
+      };
+      state.loading = false;
+      state.error = {
+        message: "",
+      };
+    });
+    builder.addCase(answerQuestion.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+      state.error = {
+        message: action.error.message,
+      };
     });
   },
 });
@@ -70,11 +139,11 @@ export function fetchQuestions() {
     dispatch(getQuestions());
 
     try {
-      //   const response = await fetch("/api/questions");
-      //   const data = await response.json();
-      const data = await new Promise(
-        (res, rej) => setTimeout(() => res(questions), 2000)
-        // setTimeout(() => rej(`Network down`), 2000)
+      const data = await new Promise((res, rej) =>
+        setTimeout(async () => {
+          const parsedQuestions = await Api.get(`/questions`);
+          res(parsedQuestions);
+        }, 2000)
       );
       dispatch(getQuestionsSuccess(data));
     } catch (error) {
@@ -88,17 +157,51 @@ export const fetchQuestionById = createAsyncThunk(
   async (questionId, thunkAPI) => {
     const state = thunkAPI.getState();
     if (!state.questions.questions || !state.questions?.questions[questionId]) {
-      return await new Promise((res, rej) =>
-        setTimeout(() => {
-          if (questions[questionId]) {
-            res(questions[questionId]);
-          } else {
-            rej(`Question ${questionId} not found`);
-          }
-        }, 2000)
-      );
+      return Api.get(`/questions/:questionId`, { questionId });
     } else {
       return state.questions.questions[questionId];
     }
+  }
+);
+
+export const addQuestion = createAsyncThunk(
+  "questions/addQuestion",
+  async ({ optionOne, optionTwo, author }, thunkAPI) => {
+    const questionCreated = await Api.post(`/questions/add`, {
+      optionOne,
+      optionTwo,
+      author,
+    });
+    thunkAPI.dispatch(
+      userCreatedQuestion({
+        questionId: questionCreated.id,
+        id: author,
+      })
+    );
+    return questionCreated;
+  }
+);
+
+export const answerQuestion = createAsyncThunk(
+  "questions/answerQuestion",
+  async ({ id, answer, userId, question }, thunkAPI) => {
+    const questionUpdated = await Api.post(`/questions/${id}/answer`, {
+      id,
+      answer,
+      userId,
+      question,
+    });
+
+    thunkAPI.dispatch(
+      userAnsweredQuestion({
+        questionId: questionUpdated.id,
+        answer,
+        id: userId,
+      })
+    );
+    return {
+      id,
+      questionUpdated,
+    };
   }
 );

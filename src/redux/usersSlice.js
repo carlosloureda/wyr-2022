@@ -10,7 +10,36 @@ const initialState = {
 export const usersSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    userCreatedQuestion: (state, { payload }) => {
+      //TODO: if no users we should fetch from API
+      const _users = state.users || users;
+      state.users = {
+        ..._users,
+        [payload.id]: {
+          ..._users[payload.id],
+          questions: [
+            ...(_users[payload.id].questions || []),
+            payload.questionId,
+          ],
+        },
+      };
+    },
+    userAnsweredQuestion: (state, { payload }) => {
+      //TODO: if no users we should fetch from API
+      const _users = state.users || users;
+      state.users = {
+        ..._users,
+        [payload.id]: {
+          ..._users[payload.id],
+          answers: {
+            ...(_users[payload.id].answers || {}),
+            [payload.questionId]: payload.answer,
+          },
+        },
+      };
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.pending, (state, action) => {
       state.loading = true;
@@ -27,6 +56,7 @@ export const usersSlice = createSlice({
   },
 });
 
+export const { userCreatedQuestion, userAnsweredQuestion } = usersSlice.actions;
 export default usersSlice.reducer;
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {

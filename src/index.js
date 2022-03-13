@@ -3,11 +3,13 @@ import ReactDOM from "react-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { Provider } from "react-redux";
 
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import { store } from "./redux/store";
+import { AuthProvider } from "./context/AuthContext";
+
+import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,7 +20,9 @@ ReactDOM.render(
         <link rel="canonical" href="https://wouldyourather2022.com/" />
       </Helmet>
       <Provider store={store}>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </Provider>
     </HelmetProvider>
   </React.StrictMode>,

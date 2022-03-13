@@ -9,7 +9,7 @@ function ErrorFallback({ error }) {
   );
 }
 
-class ErrorBoundary extends React.Component {
+class MainErrorBoundary extends React.Component {
   state = { error: null };
   static getDerivedStateFromError(error) {
     return { error };
@@ -27,4 +27,4 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-export default ErrorBoundary;
+export default MainErrorBoundary;
