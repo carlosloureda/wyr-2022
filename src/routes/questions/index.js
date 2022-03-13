@@ -30,6 +30,7 @@ const QuestionItem = ({ question }) => {
         <img
           src={question.authorAvatarUrl}
           alt={`Avatar of ${question.author}`}
+          className="w-32 h-32 rounded-full mr-2 bg-indigo-400 border-4 border-amber-500"
         />
       </div>
       <div>

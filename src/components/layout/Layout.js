@@ -37,9 +37,9 @@ const Layout = ({ seo, children, ...props }) => {
   const navigate = useNavigate();
 
   return (
-    <div id="layout">
+    <div id="layout" style={{ height: "100%" }}>
       <SEO />
-      <div className="bg-indigo-900 text-sky-50 h-16 w-full flex flex-row items-center">
+      <header className="bg-indigo-900 text-sky-50 h-16 w-full flex flex-row items-center">
         <div className="basis-1/6 flex justify-center">
           <h1 className="uppercase text-xl text-amber-500">Would You Rather</h1>
         </div>
@@ -73,10 +73,15 @@ const Layout = ({ seo, children, ...props }) => {
             <Link to="/login">Login</Link>
           )}
         </div>
-      </div>
-      <MainErrorBoundary>
-        <Outlet />
-      </MainErrorBoundary>
+      </header>
+      <main
+        className="h-full flex-1 flex flex-1 justify-center pt-12"
+        style={{ height: "100%" }}
+      >
+        <MainErrorBoundary>
+          <Outlet />
+        </MainErrorBoundary>
+      </main>
     </div>
   );
 };
