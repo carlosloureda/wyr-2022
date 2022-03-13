@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Api from "@/api";
+import {
+  fetchUsers,
+  updateUser,
+  userAnsweredQuestion,
+  userCreatedQuestion,
+} from "./usersSlice";
 
 const initialState = {
   questions: null,
@@ -166,6 +172,12 @@ export const addQuestion = createAsyncThunk(
       optionTwo,
       author,
     });
+    thunkAPI.dispatch(
+      userCreatedQuestion({
+        questionId: questionCreated.id,
+        id: author,
+      })
+    );
     return questionCreated;
   }
 );
@@ -179,6 +191,14 @@ export const answerQuestion = createAsyncThunk(
       userId,
       question,
     });
+
+    thunkAPI.dispatch(
+      userAnsweredQuestion({
+        questionId: questionUpdated.id,
+        answer,
+        id: userId,
+      })
+    );
     return {
       id,
       questionUpdated,
