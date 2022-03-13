@@ -15,7 +15,7 @@ const QuestionCard = ({ question, renderQuestion, ...props }) => {
         <h3>{question.author} asks:</h3>
       </div>
       <div className="flex p-4">
-        <div className="basis-1/4">
+        <div className="basis-1/4 flex justify-center items-center">
           <Avatar
             size={30}
             avatarURL={question.authorAvatarUrl}
