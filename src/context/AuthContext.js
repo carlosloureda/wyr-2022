@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import Api from "@/api";
+import Loader from "../components/ui/Loader/Loader";
 
 const AuthContext = createContext();
 
@@ -84,7 +85,11 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={memoizedAuthState}>
       {!loadingInitial && children}
-      {!!loadingInitial && <p>Retreiving user from session ...</p>}
+      {!!loadingInitial && (
+        <Loader>
+          <p>Retreiving user from session ...</p>
+        </Loader>
+      )}
     </AuthContext.Provider>
   );
 };
