@@ -5,7 +5,7 @@ import clsx from "clsx";
 
 import MainErrorBoundary from "@/components/MainErrorBoundary";
 import useAuth from "@/context/AuthContext";
-import Avatar from "../ui/Avatar";
+import Avatar from "@/components/ui/Avatar";
 
 const StyledNavLink = (props) => (
   <NavLink
@@ -55,7 +55,7 @@ const Layout = ({ seo, children, ...props }) => {
             <>
               <p>{currentUser.id}</p>
               <Avatar
-                size={10}
+                size={14}
                 avatarURL={currentUser.avatarURL}
                 altText={`Avatar of ${currentUser.id}`}
                 className="mr-2"
@@ -76,10 +76,7 @@ const Layout = ({ seo, children, ...props }) => {
           )}
         </div>
       </header>
-      <main
-        className="h-full flex-1 flex flex-1 justify-center pt-12"
-        style={{ height: "100%" }}
-      >
+      <main className="h-full flex justify-center mt-12">
         <MainErrorBoundary>
           <Outlet />
         </MainErrorBoundary>

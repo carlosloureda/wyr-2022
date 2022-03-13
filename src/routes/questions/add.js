@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { addQuestion } from "@/redux/questionsSlice";
+import Button from "@/components/ui/Button";
 import useAuth from "@/context/AuthContext";
 
 const AddQuestion = () => {
@@ -31,35 +32,48 @@ const AddQuestion = () => {
   };
 
   return (
-    <>
-      <h1>Add a new question</h1>
-      <form onSubmit={onAddQuestion}>
-        <h2>Would You Rather?</h2>
-
-        <div>
-          <label htmlFor="optionOne">Enter Option One:</label>
+    <div className="w-[650px] border-2 border-slate-500 flex flex-col ">
+      <div className="bg-black text-white p-4 text-left tracking-wide h-24 text-center">
+        <h2 className="text-xl font-bold pt-2">Add a new question</h2>
+      </div>
+      <form onSubmit={onAddQuestion} className="flex flex-col px-8 py-4">
+        <h3 className="text-l font-bold">Would You Rather?</h3>
+        <div className="flex flex-col pt-4">
+          <label htmlFor="optionOne" className="pb-2">
+            Enter Option One:
+          </label>
           <input
             type="text"
             id="optionOne"
             name="optionOneText"
             required
             placeholder="always be 10 minutes late"
+            className="border-2 p-2 focus:border-indigo-500 focus:outline-none"
           />
         </div>
-        <div>
-          <label htmlFor="optionTwo">Enter Option Two:</label>
+        <div className="py-4 text-center text-slate-500">
+          <p>OR</p>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="optionOne" className="pb-2">
+            Enter Option Two:
+          </label>
           <input
             type="text"
-            required
             id="optionTwo"
             name="optionTwoText"
-            placeholder="always be 20 minutes early"
+            required
+            placeholder="always be 10 minutes late"
+            className="border-2 p-2 focus:border-indigo-500 focus:outline-none"
           />
         </div>
-
-        <button disabled={loading}>Save Question</button>
+        <div className="mt-4 flex justify-center">
+          <Button kind="primary" disabled={loading}>
+            Save Question
+          </Button>
+        </div>
       </form>
-    </>
+    </div>
   );
 };
 

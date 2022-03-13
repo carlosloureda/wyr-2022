@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 const Avatar = ({ avatarURL, altText, size = 32, ...props }) => {
-  const borderWidth = size > 12 ? 4 : 2;
+  const borderWidth = size > 12 ? 2 : 2;
   return (
     <img
       {...props}
