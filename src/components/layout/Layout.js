@@ -76,7 +76,7 @@ const Layout = ({ seo, children, ...props }) => {
           )}
         </div>
       </header>
-      <main className="h-full flex justify-center mt-12">
+      <main className="h-full flex justify-center mt-12 pb-12">
         <MainErrorBoundary>
           <Outlet />
         </MainErrorBoundary>
