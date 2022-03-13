@@ -1,11 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Api from "@/api";
-import {
-  fetchUsers,
-  updateUser,
-  userAnsweredQuestion,
-  userCreatedQuestion,
-} from "./usersSlice";
+import { userAnsweredQuestion, userCreatedQuestion } from "./usersSlice";
 
 const initialState = {
   questions: null,
