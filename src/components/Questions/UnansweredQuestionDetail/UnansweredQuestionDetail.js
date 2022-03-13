@@ -2,6 +2,8 @@ import { useDispatch } from "react-redux";
 
 import useAuth from "@/context/AuthContext";
 import { answerQuestion } from "@/redux/questionsSlice";
+import QuestionCard from "@/components/QuestionCard/QuestionCard";
+import Button from "@/components/ui/Button";
 
 const UnansweredQuestionDetail = ({ question, loading }) => {
   const { currentUser } = useAuth();
@@ -18,43 +20,44 @@ const UnansweredQuestionDetail = ({ question, loading }) => {
     );
   };
   return (
-    <div>
-      <h3>{question.author} asks</h3>
-      <div>
-        <img
-          src={question.authorAvatarUrl}
-          alt={`Avatar of ${question.author}`}
-        />
-      </div>
-      <div>
-        <p>Would You Rather:</p>
-        <form onSubmit={onSubmitAnswer}>
-          <p>{question.optionOne.text}</p>
-
-          <div>
-            <input
-              type="radio"
-              name="option"
-              value="optionOne"
-              id="optionOne"
-              required
-            />
-            <label htmlFor="optionOne">{question.optionOne.text}</label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              name="option"
-              value="optionTwo"
-              id="optionTwo"
-              required
-            />
-            <label htmlFor="optionOne">{question.optionTwo.text}</label>
-          </div>
-          <button disabled={loading}>Submit answer</button>
-        </form>
-      </div>
-    </div>
+    <QuestionCard
+      question={question}
+      renderQuestion={() => {
+        return (
+          <>
+            <h2 className="font-bold text-xl">Would You Rather:</h2>
+            <form onSubmit={onSubmitAnswer} className="my-2">
+              <div className="flex flex-row items-center py-2 ml-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="optionOne"
+                  id="optionOne"
+                  required
+                  className="mr-2"
+                />
+                <label htmlFor="optionOne">{question.optionOne.text}</label>
+              </div>
+              <div className="flex flex-row items-center pb-5  ml-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="optionTwo"
+                  id="optionTwo"
+                  required
+                  className="mr-2"
+                />
+                <label htmlFor="optionTwo">{question.optionTwo.text}</label>
+              </div>
+              <Button disabled={loading}>
+                Submit{loading && "ing"} answer
+              </Button>
+            </form>
+          </>
+        );
+      }}
+    />
   );
 };
+
 export default UnansweredQuestionDetail;

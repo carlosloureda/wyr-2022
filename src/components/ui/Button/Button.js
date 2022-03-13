@@ -1,7 +1,6 @@
 import clsx from "clsx";
 
 const Button = ({ kind = "primary", ...props }) => {
-  console.log("disabled: ", props.disabled);
   return (
     <button
       {...props}

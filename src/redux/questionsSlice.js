@@ -4,9 +4,9 @@ import Api from "@/api";
 const initialState = {
   questions: null,
   loading: false,
+  action: "", // 'fetchQuestions', 'fetchQuestionById', 'addQuestion'
   error: {
     message: "",
-    action: "", // 'fetchQuestions', 'fetchQuestionById', 'addQuestion'
   },
   // To diff when we fetched all the info or not.
   allFetched: false,
@@ -19,6 +19,7 @@ export const questionsSlice = createSlice({
   reducers: {
     getQuestions: (state) => {
       state.loading = true;
+      state.action = "fetchQuestions";
     },
     getQuestionsSuccess: (state, { payload }) => {
       state.questions = {
@@ -28,7 +29,6 @@ export const questionsSlice = createSlice({
       state.loading = false;
       state.error = {
         message: "",
-        action: "",
       };
       state.allFetched = true;
     },
@@ -36,7 +36,6 @@ export const questionsSlice = createSlice({
       state.loading = false;
       state.error = {
         message: payload.error,
-        action: "fetchQuestions",
       };
       state.allFetched = false;
     },
@@ -45,6 +44,7 @@ export const questionsSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchQuestionById.pending, (state, action) => {
       state.loading = true;
+      state.action = "fetchQuestionById";
     });
     builder.addCase(fetchQuestionById.fulfilled, (state, action) => {
       // Add user to the state array
@@ -55,7 +55,6 @@ export const questionsSlice = createSlice({
       state.loading = false;
       state.error = {
         message: "",
-        action: "",
       };
     });
     builder.addCase(fetchQuestionById.rejected, (state, action) => {
@@ -63,13 +62,13 @@ export const questionsSlice = createSlice({
       state.error = action.error.message;
       state.error = {
         message: action.error.message,
-        action: "fetchQuestionById",
       };
     });
 
     // Add Question
     builder.addCase(addQuestion.pending, (state, action) => {
       state.loading = true;
+      state.action = "addQuestion";
     });
     builder.addCase(addQuestion.fulfilled, (state, action) => {
       state.questions = {
@@ -79,7 +78,6 @@ export const questionsSlice = createSlice({
       state.loading = false;
       state.error = {
         message: "",
-        action: "",
       };
     });
     builder.addCase(addQuestion.rejected, (state, action) => {
@@ -87,13 +85,13 @@ export const questionsSlice = createSlice({
       state.error = action.error.message;
       state.error = {
         message: action.error.message,
-        action: "addQuestion",
       };
     });
 
     // Answer Question
     builder.addCase(answerQuestion.pending, (state, action) => {
       state.loading = true;
+      state.action = "answerQuestions";
     });
     builder.addCase(answerQuestion.fulfilled, (state, action) => {
       state.questions = {
@@ -113,7 +111,6 @@ export const questionsSlice = createSlice({
       state.loading = false;
       state.error = {
         message: "",
-        action: "",
       };
     });
     builder.addCase(answerQuestion.rejected, (state, action) => {
@@ -121,7 +118,6 @@ export const questionsSlice = createSlice({
       state.error = action.error.message;
       state.error = {
         message: action.error.message,
-        action: "answerQuestions",
       };
     });
   },

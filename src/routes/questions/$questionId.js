@@ -20,8 +20,10 @@ const useDidCurrentUserAnswer = (question) => {
 const Question = () => {
   const params = useParams();
   const dispatch = useDispatch();
-  const { questions, error, loading } = useSelector((state) => state.questions);
-  const hasError = error?.action === "fetchQuestionById";
+  const { questions, error, loading, action } = useSelector(
+    (state) => state.questions
+  );
+  const hasError = error.message && action === "fetchQuestionById";
   const question = (questions && questions[params.questionId]) || null;
   const currentUserDidAnswer = useDidCurrentUserAnswer(question);
 
@@ -32,19 +34,22 @@ const Question = () => {
   }, [dispatch, question, error, params.questionId]);
 
   return (
-    <>
-      <h1>Question Detail {params.questionId}</h1>
-      {loading && <div>Loading...</div>}
+    <div className="w-[650px] border-2 border-slate-500 flex flex-col">
+      {loading && action === "fetchQuestionById" && <div>Loading...</div>}
       {hasError && <div>{error.message}</div>}
       {question && currentUserDidAnswer && (
-        <AnsweredQuestionDetail question={question} loading={loading} />
+        <AnsweredQuestionDetail
+          question={question}
+          loading={loading && action === "answerQuestions"}
+        />
       )}
       {question && !currentUserDidAnswer && (
-        <UnansweredQuestionDetail question={question} loading={loading} />
+        <UnansweredQuestionDetail
+          question={question}
+          loading={loading && action === "answerQuestions"}
+        />
       )}
-
-      {/* {question && <p>Author: {question.author}</p>} */}
-    </>
+    </div>
   );
 };
 

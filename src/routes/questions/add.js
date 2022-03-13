@@ -32,7 +32,7 @@ const AddQuestion = () => {
   };
 
   return (
-    <div className="w-[650px] border-2 border-slate-500 flex flex-col ">
+    <div className="w-[650px] border-2 border-slate-500 flex flex-col">
       <div className="bg-black text-white p-4 text-left tracking-wide h-24 text-center">
         <h2 className="text-xl font-bold pt-2">Add a new question</h2>
       </div>
