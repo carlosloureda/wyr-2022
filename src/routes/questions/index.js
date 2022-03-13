@@ -1,49 +1,12 @@
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
 import { fetchQuestions, questionsSelector } from "@/redux/questionsSlice";
 import useAuth from "@/context/AuthContext";
+import QuestionListItem from "@/components/QuestionListItem";
 
 import "@reach/tabs/styles.css";
-
-// TODO: move to component
-
-const QuestionItem = ({ question }) => {
-  const navigate = useNavigate();
-
-  // const clickbait2 = useCallback(
-  //   (optionText) => (optionText ? `...${optionText.slice(0, 15)}...` : ""),
-  //   []
-  // );
-
-  const clickbait = useMemo(
-    () => (question ? `...${question.optionOne.text.slice(0, 15)}...` : ""),
-    [question]
-  );
-
-  return (
-    <div>
-      <h3>{question.author} asks</h3>
-      <div>
-        <img
-          src={question.authorAvatarUrl}
-          alt={`Avatar of ${question.author}`}
-          className="w-32 h-32 rounded-full mr-2 bg-indigo-400 border-4 border-amber-500"
-        />
-      </div>
-      <div>
-        <p>Would You Rather:</p>
-        {/* <p>{clickbait2(question.optionOne.text)}</p> */}
-        <p>{clickbait}</p>
-        <button onClick={() => navigate(`/questions/${question.id}`)}>
-          View Poll
-        </button>
-      </div>
-    </div>
-  );
-};
 
 const useSplittedQuestions = (questions) => {
   const { currentUser } = useAuth();
@@ -95,37 +58,49 @@ const QuestionsRoute = () => {
   }
   return (
     <>
-      <h1>Questions</h1>
-
-      <Tabs>
-        <TabList>
-          <Tab>Unanswered</Tab>
-          <Tab>Answered</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <ul>
-              {unansweredQuestions?.map((question) => {
-                return (
-                  <li key={question.id}>
-                    <QuestionItem question={question} />
-                  </li>
-                );
-              })}
-            </ul>
-          </TabPanel>
-          <TabPanel>
-            <ul>
-              {answeredQuestions?.map((question) => {
-                return (
-                  <li key={question.id}>
-                    <QuestionItem question={question} />
-                  </li>
-                );
-              })}
-            </ul>
-          </TabPanel>
-        </TabPanels>
+      <Tabs className="w-[650px]">
+        {({ selectedIndex, focusedIndex }) => {
+          const getTabStyle = (index) =>
+            `uppercase p-4 ${
+              selectedIndex === index
+                ? "bg-indigo-500 text-white"
+                : focusedIndex === index
+                ? "bg-transparent text-indigo-500"
+                : "bg-transparent text-indigo-500"
+            }`;
+          return (
+            <>
+              <TabList className="flex justify-center bg-transparent mb-6 py-4 gap-4 border-indigo-700 border-0 border-b-2 ">
+                <Tab className={getTabStyle(0)}>Unanswered</Tab>
+                <Tab className={getTabStyle(1)}>Answered</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <ul>
+                    {unansweredQuestions?.map((question) => {
+                      return (
+                        <li key={question.id} className="mt-4 first:mt-0">
+                          <QuestionListItem question={question} />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </TabPanel>
+                <TabPanel>
+                  <ul>
+                    {answeredQuestions?.map((question) => {
+                      return (
+                        <li key={question.id} className="mt-4 first:mt-0">
+                          <QuestionListItem question={question} />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </TabPanel>
+              </TabPanels>
+            </>
+          );
+        }}
       </Tabs>
     </>
   );

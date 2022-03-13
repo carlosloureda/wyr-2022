@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Avatar from "../ui/Avatar";
 
 const LeaderBoardCard = ({ user, ...props }) => {
   return (
@@ -10,11 +11,7 @@ const LeaderBoardCard = ({ user, ...props }) => {
       )}
     >
       <div className="basis-1/4">
-        <img
-          src={user.avatarURL}
-          alt={user.id}
-          className="w-32 h-32 rounded-full mr-2 bg-indigo-400 border-4 border-amber-500"
-        />
+        <Avatar size={32} avatarURL={user.avatarURL} altText={user.id} />
       </div>
       <div className="flex flex-col flex-1 basis-2/4">
         <h2 className="text-xl font-bold">{user.name}</h2>

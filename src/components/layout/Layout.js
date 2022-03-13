@@ -5,6 +5,7 @@ import clsx from "clsx";
 
 import MainErrorBoundary from "@/components/MainErrorBoundary";
 import useAuth from "@/context/AuthContext";
+import Avatar from "../ui/Avatar";
 
 const StyledNavLink = (props) => (
   <NavLink
@@ -53,10 +54,11 @@ const Layout = ({ seo, children, ...props }) => {
           {currentUser ? (
             <>
               <p>{currentUser.id}</p>
-              <img
-                src={currentUser.avatarURL}
-                alt={`Avatar of ${currentUser.id}`}
-                className="w-10 h-10 rounded-full mr-2"
+              <Avatar
+                size={10}
+                avatarURL={currentUser.avatarURL}
+                altText={`Avatar of ${currentUser.id}`}
+                className="mr-2"
               />
               <Link
                 to="/logout"
