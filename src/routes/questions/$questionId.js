@@ -12,7 +12,7 @@ const useDidCurrentUserAnswer = (question) => {
   return (
     (question &&
       (question.optionOne.votes.includes(currentUser.id) ||
-        question.optionOne.votes.includes(currentUser.id))) ||
+        question.optionTwo.votes.includes(currentUser.id))) ||
     false
   );
 };

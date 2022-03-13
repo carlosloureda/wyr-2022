@@ -96,17 +96,7 @@ export const questionsSlice = createSlice({
     builder.addCase(answerQuestion.fulfilled, (state, action) => {
       state.questions = {
         ...state.questions,
-        [action.payload.id]: {
-          ...state.questions[action.payload.id],
-          [action.payload.answer]: {
-            ...state.questions[action.payload.id][action.payload.answer],
-            votes: [
-              ...state.questions[action.payload.id][action.payload.answer]
-                .votes,
-              action.payload.userId,
-            ],
-          },
-        },
+        [action.payload.id]: action.payload.questionUpdated,
       };
       state.loading = false;
       state.error = {
@@ -171,35 +161,27 @@ export const fetchQuestionById = createAsyncThunk(
 export const addQuestion = createAsyncThunk(
   "questions/addQuestion",
   async ({ optionOne, optionTwo, author }, thunkAPI) => {
-    const questionId = await Api.post(`/questions/add`, {
+    const questionCreated = await Api.post(`/questions/add`, {
       optionOne,
       optionTwo,
       author,
     });
-    return {
-      id: questionId,
-      author: author,
-      timestamp: Date.now(),
-      optionOne: {
-        votes: [],
-        text: optionOne,
-      },
-      optionTwo: {
-        votes: [],
-        text: optionTwo,
-      },
-    };
+    return questionCreated;
   }
 );
 
 export const answerQuestion = createAsyncThunk(
   "questions/answerQuestion",
-  async ({ id, answer, userId }, thunkAPI) => {
-    await Api.post(`/questions/${id}/answer`, { id, answer, userId });
-    return {
+  async ({ id, answer, userId, question }, thunkAPI) => {
+    const questionUpdated = await Api.post(`/questions/${id}/answer`, {
       id,
       answer,
       userId,
+      question,
+    });
+    return {
+      id,
+      questionUpdated,
     };
   }
 );

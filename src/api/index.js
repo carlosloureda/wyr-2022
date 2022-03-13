@@ -44,7 +44,30 @@ const Api = {
             ...users[options.author],
           });
         } else if (url === "/questions/add") {
-          resolve(uuidv4());
+          resolve({
+            id: uuidv4(),
+            authorAvatarUrl: users[options.author].avatarURL,
+            author: options.author,
+            timestamp: Date.now(),
+            optionOne: {
+              votes: [],
+              text: options.optionOne,
+            },
+            optionTwo: {
+              votes: [],
+              text: options.optionTwo,
+            },
+          });
+        } else if (url.includes("/answer")) {
+          const question = options.question;
+          resolve({
+            ...question,
+            authorAvatarUrl: users[question.author].avatarURL,
+            [options.answer]: {
+              ...question[options.answer],
+              votes: [...question[options.answer].votes, options.userId],
+            },
+          });
         } else {
           resolve({ ok: true });
         }

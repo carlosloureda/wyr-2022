@@ -14,6 +14,7 @@ const UnansweredQuestionDetail = ({ question, loading }) => {
     dispatch(
       answerQuestion({
         id: question.id,
+        question: question,
         answer: e.target.elements.option.value,
         userId: currentUser.id,
       })

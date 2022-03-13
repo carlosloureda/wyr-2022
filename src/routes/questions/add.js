@@ -69,7 +69,7 @@ const AddQuestion = () => {
         </div>
         <div className="mt-4 flex justify-center">
           <Button kind="primary" disabled={loading}>
-            Save Question
+            Sav{loading ? "ing" : "e"} Question
           </Button>
         </div>
       </form>
