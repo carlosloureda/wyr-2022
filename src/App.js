@@ -16,8 +16,6 @@ import Layout from "./components/Layout";
 import NotFoundPage from "./components/NotFoundPage";
 import useAuth from "./context/AuthContext";
 
-import "./App.css";
-
 const ProtectedRoute = ({ children }) => {
   const { currentUser } = useAuth();
   if (!currentUser) {
